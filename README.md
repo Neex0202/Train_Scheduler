@@ -14,7 +14,7 @@ Pseudo Code
 
 2. Link Firebase && Test Link
 
-3. Event listener for submit button
+3. Event listener for submit buttonbn 
 	a. event.preventDefault();
 	b. define variables for jQuery input objects
 		i. Train Name

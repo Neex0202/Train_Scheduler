@@ -22,11 +22,31 @@ $("#add-train").on("click", function() {
   var firstTrain = moment($("#first-train-input").val().trim(), "HH:mm").format("HH:mm");
   var trainFrequency = $("#frequency-input").val().trim();
 
+  var currentTime = moment($(currentTimestamp));  //Find moment.Js method for current time
+  var timeDif = currentTime - firstTrain;  // convert difference to minutes
+  // Create new variable for timeDif in minutes if necessary
+  var minsAway = timeDif % trainFrequency; //"Y" || Remainder    *timeDif must be in mins 
+  var nextArrival = currentTime + minsAway;  //"X"  in mins      *Convert to "HH:mm" 
+
+
+  // Math for new Variables Specifically moment.JS conversions
+
+
+
   // Test Variables = working!
   console.log(trainName);
   console.log(trainDestination);
   console.log(firstTrain);
   console.log(trainFrequency);
+  
+
+
+  console.log(currentTime);
+  console.log(timeDif);
+  console.log(minsAway);
+  console.log(nextArrival);
+
+
 
   // Create Singular train object to hold train info
 
@@ -34,9 +54,16 @@ $("#add-train").on("click", function() {
     name: trainName,
     destination: trainDestination,
     start: firstTrain,
-    frequency: trainFrequency
+    frequency: trainFrequency,
+
+
+  // New items
+    currentTime: currentTime,
+    minutesAway: minsAway,  // in "mmmm" 
+    nextArrival: nextArrival,  // in "HH:mm"
 
   };
+
 
   // Test newTrain Object = working!
   console.log(newTrain);
@@ -44,11 +71,20 @@ $("#add-train").on("click", function() {
   // Pushing newTrain info to firebase = working!
   database.ref().push(newTrain);
 
+  database.ref().push(currentTime);  //CREATE NEW PARENT DIR or APPEND AS Child to newTrain
+
 // Test Database items = working!
   console.log(newTrain.name);
   console.log(newTrain.destination);
   console.log(newTrain.start);
   console.log(newTrain.frequency);
+
+//Test for new items
+
+  console.log(newTrain.currentTime);
+  console.log(newTrain.minutesAway);
+  console.log(newTrain.nextArrival);
+
 
 // Clear Input Forms
   $("#train-name-input").val("");
@@ -71,19 +107,26 @@ var destinationName = snap.val().destination;
 var firstTrain = snap.val().start;
 var trainFrequency = snap.val().frequency;
 
+// New Variables for Calculated Variables
+var currentTime = snap.val().currentTime;  //Rename to TIMESTAMP???
+var minsAway = snap.val().minutesAway; 
+var nextArrival = snap.val().nextArrival;
+
 
 //Test Variables of items of child (newTrain) = working!
 console.log(trainName);
 console.log(destinationName);
 console.log(firstTrain);
 console.log(trainFrequency);
+console.log(currentTime);
+console.log(minsAway);
+console.log(nextArrival);
+
 
 
 // Update HTML with 
 $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + destinationName + "</td><td>" +
-  trainFrequency + "</td><td>" + "CALCULATE!" + firstTrain + "</td><td>" + "CALCULATE!" + "</td></tr>");
-
-
+  trainFrequency + "</td><td>" + nextArrival  + "</td><td>" + minsAway + "</td></tr>");
 
 
 
